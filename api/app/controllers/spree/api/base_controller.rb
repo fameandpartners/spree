@@ -4,8 +4,6 @@ module Spree
       include Spree::Api::ControllerSetup
       include ::ActionController::Head
 
-      self.responder = Spree::Api::Responders::AppResponder
-
       attr_accessor :current_api_user
 
       before_filter :set_content_type

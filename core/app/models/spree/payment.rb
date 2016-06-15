@@ -5,7 +5,7 @@ module Spree
     belongs_to :source, :polymorphic => true, :validate => true
     belongs_to :payment_method
 
-    has_many :offsets, :class_name => "Spree::Payment", :foreign_key => :source_id, :conditions => "source_type = 'Spree::Payment' AND amount < 0 AND state = 'completed'"
+    has_many :offsets, -> { "source_type = 'Spree::Payment' AND amount < 0 AND state = 'completed'" }, :class_name => "Spree::Payment", :foreign_key => :source_id
     has_many :log_entries, :as => :source
 
     before_create :set_unique_identifier
@@ -24,10 +24,10 @@ module Spree
 
     scope :from_credit_card, lambda { where(:source_type => 'Spree::CreditCard') }
     scope :with_state, lambda { |s| where(:state => s) }
-    scope :completed, with_state('completed')
-    scope :pending, with_state('pending')
-    scope :failed, with_state('failed')
-    scope :valid, where("state NOT IN (?)", %w(failed invalid))
+    scope :completed, -> { with_state('completed') }
+    scope :pending, -> { with_state('pending') }
+    scope :failed, -> { with_state('failed') }
+    scope :valid, -> { where("state NOT IN (?)", %w(failed invalid)) }
 
     after_rollback :persist_invalid
 

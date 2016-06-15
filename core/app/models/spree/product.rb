@@ -30,24 +30,17 @@ module Spree
     belongs_to :tax_category
     belongs_to :shipping_category
 
-    has_one :master,
-      :class_name => 'Spree::Variant',
-      :conditions => { :is_master => true },
-      :dependent => :destroy
+    has_one :master, -> { where(:is_master => true) }, :class_name => 'Spree::Variant', :dependent => :destroy
 
-    has_many :variants,
-      :class_name => 'Spree::Variant',
-      :conditions => { :is_master => false, :deleted_at => nil },
-      :order => "#{::Spree::Variant.quoted_table_name}.position ASC"
+    has_many :variants, -> { where( :is_master => false, :deleted_at => nil ) }, :class_name => 'Spree::Variant'
+    scope :variants, -> { order("#{::Spree::Variant.quoted_table_name}.position ASC") }
 
-    has_many :variants_including_master,
-      :class_name => 'Spree::Variant',
-      :conditions => { :deleted_at => nil },
-      :dependent => :destroy
+    has_many :variants_including_master, -> { where(:deleted_at => nil) }, :class_name => 'Spree::Variant'
 
     has_many :variants_including_master_and_deleted, :class_name => 'Spree::Variant'
 
-    has_many :prices, :through => :variants, :order => 'spree_variants.position, spree_variants.id, currency'
+    has_many :prices, :through => :variants
+    scope :prices, -> { order('spree_variants.position, spree_variants.id, currency') }
 
     delegate_belongs_to :master, :sku, :price, :currency, :display_amount, :display_price, :weight, :height, :width, :depth, :is_master, :has_default_price?, :cost_currency, :price_in, :amount_in
     delegate_belongs_to :master, :cost_price if Variant.table_exists? && Variant.column_names.include?('cost_price')
@@ -63,7 +56,8 @@ module Spree
     delegate :images, :to => :master, :prefix => true
     alias_method :images, :master_images
 
-    has_many :variant_images, :source => :images, :through => :variants_including_master, :order => :position
+    has_many :variant_images, :source => :images, :through => :variants_including_master
+    scope :variant_images, -> { order(:position) }
 
     accepts_nested_attributes_for :variants, :allow_destroy => true
 
