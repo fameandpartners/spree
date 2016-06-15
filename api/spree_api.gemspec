@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = version
 
   gem.add_dependency 'spree_core', version
-  gem.add_dependency 'versioncake', '0.4.0'
+  gem.add_dependency 'versioncake', '~> 3.1.0'
 end
