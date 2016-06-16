@@ -31,7 +31,8 @@ module Spree::Preferences::Preferable
 
   def get_preference(name)
     has_preference! name
-    send self.class.preference_getter_method(name)
+    result = send self.class.preference_getter_method(name)
+    name == :banner_styles ? result[/{.*}/] : result
   end
   alias :preferred :get_preference
   alias :prefers? :get_preference

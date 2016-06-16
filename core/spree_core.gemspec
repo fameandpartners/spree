@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'acts_as_list', '= 0.1.4'
-  s.add_dependency 'awesome_nested_set', '2.1.5'
+  s.add_dependency 'awesome_nested_set', '~> 3.0.2'
 
   s.add_dependency 'jquery-rails', '~> 2.2.0'
   s.add_dependency 'select2-rails', '3.2.1'
