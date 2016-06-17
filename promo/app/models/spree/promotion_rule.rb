@@ -5,7 +5,7 @@ module Spree
 
     scope :of_type, lambda {|t| {:conditions => {:type => t}}}
 
-    validate :promotion, :presence => true
+    validates :promotion, :presence => true
     validate :unique_per_activator, :on => :create
 
     attr_accessible :preferred_operator, :preferred_amount, :product, :product_ids_string, :preferred_match_policy

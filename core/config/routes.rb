@@ -4,7 +4,7 @@ Spree::Core::Engine.routes.draw do
 
   resources :products
 
-  match '/locale/set', :to => 'locale#set'
+  match '/locale/set', :to => 'locale#set', via: :all
 
   resources :states, :only => :index
   resources :countries, :only => :index
@@ -31,7 +31,7 @@ Spree::Core::Engine.routes.draw do
   put '/cart/empty', :to => 'orders#empty', :as => :empty_cart
 
   # route globbing for pretty nested taxon and product paths
-  match '/t/*id', :to => 'taxons#show', :as => :nested_taxons
+  match '/t/*id', :to => 'taxons#show', :as => :nested_taxons, via: :all
 
   namespace :admin do
     get '/search/users', :to => "search#users", :as => :search_users
@@ -180,9 +180,9 @@ Spree::Core::Engine.routes.draw do
     end
   end
 
-  match '/admin', :to => 'admin/orders#index', :as => :admin
+  match '/admin', :to => 'admin/orders#index', :as => :admin, via: :all
 
-  match '/unauthorized', :to => 'home#unauthorized', :as => :unauthorized
-  match '/content/cvv', :to => 'content#cvv', :as => :cvv
+  match '/unauthorized', :to => 'home#unauthorized', :as => :unauthorized, via: :all
+  match '/content/cvv', :to => 'content#cvv', :as => :cvv, via: :all
   match '/content/*path', :to => 'content#show', :via => :get, :as => :content
 end
